@@ -245,20 +245,15 @@ end
 
 hoge = FileManager.load_json("test.txt")
 MyCipher.save_as_encrypted(hoge.to_json, "hoge.txt")
-miria = Idle.generate(10001)
-chama = Idle.generate(10002)
-#p miria
-#p chama
+chara_a = Idle.generate(10001)
+chara_b = Idle.generate(10002)
 
 chama.counter_mode = true
-#miria.use_actionSkill(:normal_attack, chama)
-miria.use_actionSkill(:set_reflectMode, chama, opts:{type: [:normal_attack]})
-#p miria
-#p chama
+chara_a.use_actionSkill(:set_reflectMode, chara_b, opts:{type: [:normal_attack]})
 
-chama.use_actionSkill(:normal_attack, miria)
-pp miria
-pp chama
+chara_b.use_actionSkill(:normal_attack, chara_a)
+pp chara_a
+pp chara_b
 
 
 Window.loop do
