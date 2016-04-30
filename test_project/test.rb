@@ -248,7 +248,7 @@ MyCipher.save_as_encrypted(hoge.to_json, "hoge.txt")
 chara_a = Idle.generate(10001)
 chara_b = Idle.generate(10002)
 
-chama.counter_mode = true
+chara_b.counter_mode = true
 chara_a.use_actionSkill(:set_reflectMode, chara_b, opts:{type: [:normal_attack]})
 
 chara_b.use_actionSkill(:normal_attack, chara_a)
