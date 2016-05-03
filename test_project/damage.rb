@@ -92,7 +92,7 @@ class Damage
 		@reference = {attack: 0,deffense: 0,rate: 1.0} if @reference.class != Hash
 		@attribute = {send_type: "NONE", receive_type: "NONE", rate: 1.0} if @attribute.class != Hash
 		@critical = {decision: false, probability: 0, force_critical: false, rate: Default_critical_rate} if @critical.class != Hash
-		@amplify = {type: "NONE", target: "NONE", rate: 1.0} if @amplify.class != Hash
+		@amplify = {rate: 1.0, hit_types: []} if @amplify.class != Hash
 		@skill_type = [] if @skill_type.class != Array
 		@random = {decision: true, rate: 1.0, rate_higher: rate_higher, rate_lower: rate_lower} if @random.class != Hash
 		@send_skills = [] if @send_skills.class != Array
