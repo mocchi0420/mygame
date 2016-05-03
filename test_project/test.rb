@@ -98,56 +98,6 @@ class Charactor < GameObject
 	
 end
 
-# ******************************************
-# ==== ゲーム内で使用するスキル用の機能 ====
-# ******************************************
-=begin
-#スキルクラスの大元
-class Skill
-	include BaseDamage
-	
-	def normal_attack(from, to, opts:{type: []})
-		opts={
-			random:{decision: true, rate_higher:500, rate_lower: 300}, 
-			skill_type: [:normal_attack], 
-			skill_name: "攻撃", 
-			critical: {rate: 2.0, force_critical: nil, probablity: Critical_probability}, 
-			amplify: []
-		}
-		attack_result = calc_basedamage(from, to, opts)
-		pp attack_result
-		to.receive_damage(attack_result)
-	end
-	
-	def set_reflectMode(from, to, opts:{type: []})
-		if opts[:type].class == Symbol || opts[:type].class == String
-			ret = Array.new(opts[:type].to_sym)
-		elsif opts[:type].class == Array
-			ret = opts[:type]
-		else
-			ret = []
-		end
-		from.set_counterMode(ret)
-	end
-
-	def reflect_damage(from, to, damage)
-		opts={random:{decision: false}, skill_type: [:counter_attack], skill_name: "攻撃反射", critical: {rate: 1.0, force_critical: false, probablity: Critical_probability}}
-		attack_result = calc_fixdamage(from, to, damage, opts)
-		pp attack_result
-		to.receive_damage(attack_result)
-		from.set_counterMode({decision: false, counter_type: []})
-	end
-end
-=end
-
-#スキルを使う側が責務を持つスキル
-#class SendSkill < Skill
-#end
-
-#スキルを受ける側が責務を持つスキル
-#class ReceiveSkill < Skill
-#end
-
 class Idle
 	require './FileManager.rb'
 	include Singleton
