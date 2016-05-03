@@ -22,6 +22,8 @@ module BaseDamage
 	Critical_probability = 15
 	
 	def calc_basedamage(from, to, opts={})
+	
+	
 		# 各種補正計算
 		param_corr = from.param_correction(to)
 		attribute_corr = from.attribute_correction(to)
@@ -173,23 +175,53 @@ module BaseDamage
 end
 
 
+
+
+
 #スキルクラスの大元
+
 class Skill
-
-end
-
-#スキルを使う側が責務を持つスキル
-class SendSkill < Skill
-
-
-	def attack()
+	include Singleton
+	extend BaseDamage
+	attr_reader :result
 	
+	def initialize
+	end
+	
+	def self.use(skill_name, opts={}, &block)
+		tmp = opts
+		#block.call(tmp)
+		self.send(skill_name, tmp)
 	end
 
-end
+	private
+	def log
+		pp @result
+	end
+	
+	def self.attack(opts={})
+		attack_result = calc_basedamage(opts[:from], opts[:to], opts)
+		pp attack_result
+		opts[:to].receive_damage(attack_result)
+	end
 
-#スキルを受ける側が責務を持つスキル
-class ReceiveSkill < Skill
+	def self.set_reflectMode(opts={})
+		if opts[:skill_type].class == Symbol || opts[:skill_type].class == String
+			ret = Array.new(opts[:skill_type].to_sym)
+		elsif opts[:skill_type].class == Array
+			ret = opts[:skill_type]
+		else
+			ret = []
+		end
 
+		opts[:from].set_counterMode(ret)
+	end
+	
+	def self.reflectDamage(opts={})
+		attack_result = calc_fixdamage(opts[:from], opts[:to], opts[:damage], opts)
+		opts[:to].receive_damage(attack_result)
+		opts[:from].set_counterMode({decision: false, counter_type: []})
+	end
+	
 end
 
