@@ -73,6 +73,8 @@ class Damage
 		@random = {
 			decision: true,			#trueならダメージに乱数が反映される
 			rate: 1.0, 					#ダメージに反映されている乱数の値
+			rate_higher: 1.3,		#乱数の上限値
+			rete_lower: 0.7			#乱数の下限値
 		}
 		
 		#攻撃側で発生しているスキル一覧
@@ -93,7 +95,7 @@ class Damage
 		@critical = {decision: false, probability: 0, force_critical: false, rate: Default_critical_rate} if @critical.class != Hash
 		@amplify = {type: "NONE", target: "NONE", rate: 1.0} if @amplify.class != Hash
 		@skill_type = [] if @skill_type.class != Array
-		@random = {decision: true, rate: 1.0} if @random.class != Hash
+		@random = {decision: true, rate: 1.0, rate_higher: rate_higher, rate_lower: rate_lower} if @random.class != Hash
 		@send_skills = [] if @send_skills.class != Array
 		@receive_skills = [] if @receive_skills.class != Array
 		@skill_name = "スキル名なし" if @skill_name.class != String

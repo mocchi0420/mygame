@@ -95,7 +95,7 @@ class Skill
 	include BaseDamage
 	
 	def normal_attack(from, to, opts:{type: []})
-		opts={random: true, skill_type: [:normal_attack], skill_name: "攻撃", critical: {rate: 2.0, force_critical: nil, probablity: Critical_probability}}
+		opts={random:{}, skill_type: [:normal_attack], skill_name: "攻撃", critical: {rate: 2.0, force_critical: nil, probablity: Critical_probability}}
 		attack_result = calc_basedamage(from, to, opts)
 		pp attack_result
 		to.receive_damage(attack_result)
@@ -113,7 +113,7 @@ class Skill
 	end
 
 	def reflect_damage(from, to, damage)
-		opts={random: false, skill_type: [:counter_attack], skill_name: "攻撃反射", critical: {rate: 1.0, force_critical: false, probablity: Critical_probability}}
+		opts={random:{decision: false}, skill_type: [:counter_attack], skill_name: "攻撃反射", critical: {rate: 1.0, force_critical: false, probablity: Critical_probability}}
 		attack_result = calc_fixdamage(from, to, damage, opts)
 		pp attack_result
 		to.receive_damage(attack_result)

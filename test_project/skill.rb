@@ -6,31 +6,11 @@ require 'dxruby'
 require 'json'
 require 'pp'
 
-require './damage.rb'
+require './Damage.rb'
 
 # ******************************************
 # ==== ゲーム内で使用するスキル用の機能 ====
 # ******************************************
-
-#スキルクラスの大元
-class Skill
-
-end
-
-#スキルを使う側が責務を持つスキル
-class SendSkill < Skill
-
-
-	def attack()
-	
-	end
-
-end
-
-#スキルを受ける側が責務を持つスキル
-class ReceiveSkill < Skill
-
-end
 
 module BaseDamage
 	#ダメージ補正の決定
@@ -121,14 +101,16 @@ module BaseDamage
 	end
 	
 	# 乱数補正値の算出
-	def random_correction(decision=true)
+	def random_correction(opts={})
 		random = Random.new
-		rate = random.rand(Random_lower..Random_higher).to_f/100.0
+		rate_lower = (opts[:rate_lower] != nil) ? opts[:rate_lower] : Random_lower
+		rate_higher = (opts[:rate_higher] != nil) ? opts[:rate_higher] : Random_higher
+		rate = random.rand(rate_lower..rate_higher).to_f/100.0
 		
-		if decision == true then
-			ret = {decision: true, rate: rate}
+		if opts[:decision] == false then
+			ret = {decision: false, rate: 1.00, rate_higher: (rate_higher.to_f/100.0), rate_lower: (rate_lower.to_f/100.0)}
 		else 
-			ret = {decision: false, rate: 1.00}
+			ret = {decision: true, rate: rate, rate_higher: (rate_higher.to_f/100.0), rate_lower: (rate_lower.to_f/100.0)}
 		end
 		return ret
 	end
@@ -175,3 +157,25 @@ module BaseDamage
 	end
 
 end
+
+
+#スキルクラスの大元
+class Skill
+
+end
+
+#スキルを使う側が責務を持つスキル
+class SendSkill < Skill
+
+
+	def attack()
+	
+	end
+
+end
+
+#スキルを受ける側が責務を持つスキル
+class ReceiveSkill < Skill
+
+end
+
