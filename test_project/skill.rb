@@ -27,7 +27,7 @@ module BaseDamage
 		attribute_corr = from.attribute_correction(to)
 		random_corr = from.random_correction(opts[:random])
 		critical_corr = from.critical_correction(opts[:critical])
-		#amp = {type: "SKILL", target: "CUTE", rate: 3.0}
+		amplify_corr = from.amplify_correction(to, opts[:amplify])
 		s_type = opts[:skill_type]
 		send_s = opts[:send_skills]
 		rec_s = opts[:receive_skills]
@@ -37,6 +37,7 @@ module BaseDamage
 					param_corr[:rate] *
 					attribute_corr[:rate] *
 					random_corr[:rate] *
+					amplify_corr[:rate] *
 					critical_corr[:rate] * 0.5
 
 		#ダメージオブジェクトに渡すオプションの用意
@@ -46,6 +47,7 @@ module BaseDamage
 			skill_name: opts[:skill_name],
 			attribute: attribute_corr, 
 			critical: critical_corr, 
+			amplify: amplify_corr,
 			skill_type: s_type, 
 			random: random_corr, 
 		}
@@ -156,6 +158,18 @@ module BaseDamage
 		return ret
 	end
 
+	# 特効補正値の算出
+	def amplify_correction(target, opts={})
+		rate = 1.0
+		hit_types = []
+		opts.each do |data|
+			if (data[:amp_type] == target.get_hash[:type]) || (data[:amp_type] == target.get_hash[:attribute])
+				rate *= data[:rate] 
+				hit_types.push(data)
+			end
+		end
+		return {rate: rate, hit_types: hit_types}	
+	end
 end
 
 

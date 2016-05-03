@@ -95,7 +95,13 @@ class Skill
 	include BaseDamage
 	
 	def normal_attack(from, to, opts:{type: []})
-		opts={random:{}, skill_type: [:normal_attack], skill_name: "攻撃", critical: {rate: 2.0, force_critical: nil, probablity: Critical_probability}}
+		opts={
+			random:{decision: true, rate_higher:500, rate_lower: 300}, 
+			skill_type: [:normal_attack], 
+			skill_name: "攻撃", 
+			critical: {rate: 2.0, force_critical: nil, probablity: Critical_probability}, 
+			amplify: []
+		}
 		attack_result = calc_basedamage(from, to, opts)
 		pp attack_result
 		to.receive_damage(attack_result)
