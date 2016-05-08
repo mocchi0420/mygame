@@ -37,7 +37,7 @@ class GameObject
 end
 
 class Charactor < GameObject
-	attr_reader :current_hp, :current_power, :current_deffense
+	attr_reader :current_hp, :current_power, :current_deffense, :name
 	attr_accessor :counter_mode
 
 	require './skill.rb'
@@ -45,6 +45,7 @@ class Charactor < GameObject
 
 	def initialize(opts = {})
 		hash_to_instance(opts)
+		@name = ""
 		@current_hp = @hp
 		@current_power = @power
 		@current_deffense = @deffense
@@ -65,7 +66,8 @@ class Charactor < GameObject
 				skill_name: "攻撃反射", 
 				critical: {rate: 1.0, force_critical: false, probablity: Critical_probability}
 			}
-			self.use_actionSkill("reflectDamage", opts)
+			mess = self.use_actionSkill("reflectDamage", opts)
+			p mess[:mess]
 		else
 			@current_hp -= damage.damage
 			if @current_hp <= 0 then
@@ -78,6 +80,10 @@ class Charactor < GameObject
 	
 	def use_actionSkill(skill_name, opts={})
 		Skill.use(skill_name, opts)  if self.living? == true && opts[:to].living? == true
+	end
+
+	def use_actionSkill2(skill_name ,opts={}, block=nil)
+		Skill.use(skill_name, opts, block)  if self.living? == true && opts[:to].living? == true
 	end
 	
 	def use_counterSkill(skill_name, target, damage)
@@ -124,8 +130,6 @@ end
 chara_a = Idle.generate(10001)
 chara_b = Idle.generate(10002)
 
-#chara_b.counter_mode = true
-#chara_a.use_actionSkill(:set_reflectMode, chara_b, opts:{type: [:normal_attack]})
 
 opts_a = {
 	from: chara_a,
@@ -135,8 +139,10 @@ opts_a = {
 
 #chara_a.use_actionSkill2("attack", opts_a)
 
-chara_a.use_actionSkill("set_reflectMode", opts_a)
-pp chara_a
+foo = chara_a.use_actionSkill("set_reflectMode", opts_a)
+p foo[:mess]
+
+#pp chara_a
 
 opts_b = {
 	from: chara_b,
@@ -148,11 +154,16 @@ opts_b = {
 	amplify: []
 }
 
-#chara_b.use_actionSkill(:normal_attack, chara_a)
-chara_b.use_actionSkill("attack", opts_b)
+#ブロック内で好きにデータを組み替えれば自由にスキルを変更可能
+block = Proc.new do |data|
+	#data[:skill_name] = "testtesttest"
+	data[:skill_name] = "このスキルはジャックされました"
+end
 
-pp chara_a
-pp chara_b
+bar = chara_b.use_actionSkill2("attack" ,opts_b, block)
+p bar[:mess]
+#pp chara_a
+#pp chara_b
 
 
 Window.loop do
