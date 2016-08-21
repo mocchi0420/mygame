@@ -1,0 +1,9 @@
+ID,INDEX,STRING
+1,~attack_message,{0}の攻撃！
+2,~deal_damage,{0}に{1}のダメージ！
+3,~reflect_mode,{0}は反撃の構えを取った！
+4,~reflect_attack,{0}のカウンター攻撃！
+5,~yes,はい
+6,~no,いいえ
+7,~chan,ちゃん
+8,~baboo,ばぶー
