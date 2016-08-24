@@ -17,7 +17,7 @@ module FileManager
 		Encoding.default_external = 'UTF-8' #デフォルトがWindows31-Jなのでエンコーディング設定は必須になるので注意！！
 		ret = CSV.table("./data/#{file_name}").each_with_object({}) do |data, my_hash|
 			my_hash[data[:id]] = data.to_hash
-			my_hash[data[:id]][:graph] = my_hash[data[:id]][:graph].to_sym
+			my_hash[data[:id]][:graph] = my_hash[data[:id]][:graph].to_sym if my_hash[data[:id]][:graph] != nil
 		end
 		return ret
 	end
